@@ -17,15 +17,17 @@ export default async function Home() {
 	console.log(data);
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between p-24'>
-			{data.trainServices.map((service: TrainService, index: number) => {
-				return (
-					<div key={service.serviceID} className='my-4'>
-						<div>Scheduled - {service.sta}</div>
-						<div>ETA - {service.eta}</div>
-						<div>Platform - {service.platform}</div>
-					</div>
-				);
-			})}
+			{data?.trainServices?.map(
+				(service: TrainService, index: number) => {
+					return (
+						<div key={service.serviceID} className='my-4'>
+							<div>Scheduled - {service.sta}</div>
+							<div>ETA - {service.eta}</div>
+							<div>Platform - {service.platform}</div>
+						</div>
+					);
+				}
+			)}
 		</main>
 	);
 }
