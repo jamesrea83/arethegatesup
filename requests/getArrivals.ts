@@ -1,14 +1,14 @@
 import getBaseUrl from '@/requests/getBaseUrl';
 
 export default async function getArrivals(code: string) {
-	if (!process.env.xapikey) return;
+	if (!process.env.XAPIKEY) return;
 	const baseUrl = getBaseUrl();
 	const url = `${baseUrl}/${code}`;
 	const response = await fetch(url, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'text/xml',
-			'x-apikey': process.env.xapikey,
+			'x-apikey': process.env.XAPIKEY,
 		},
 		cache: 'no-cache',
 	});
