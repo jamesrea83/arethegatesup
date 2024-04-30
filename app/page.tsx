@@ -29,25 +29,25 @@ interface Train {
 }
 
 export default async function Home() {
-	const url = 'https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb9.asmx';
-	const sampleHeaders = {
-		'Content-Type': 'text/xml',
-		Accept: '*/*',
-	};
+	// const url = 'https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb9.asmx';
+	// const sampleHeaders = {
+	// 	'Content-Type': 'text/xml',
+	// 	Accept: '*/*',
+	// };
 
-	const { response } = await soapRequest({
-		url: url,
-		headers: sampleHeaders,
-		xml: xmlBody,
-		timeout: 10000,
-	}); // Optional timeout parameter(milliseconds)
-	const { headers, body, statusCode } = response;
+	// const { response } = await soapRequest({
+	// 	url: url,
+	// 	headers: sampleHeaders,
+	// 	xml: xmlBody,
+	// 	timeout: 10000,
+	// }); // Optional timeout parameter(milliseconds)
+	// const { headers, body, statusCode } = response;
 
-	const parser = new XMLParser();
-	let jObj = parser.parse(body);
-	const data =
-		jObj['soap:Envelope']['soap:Body'].GetArrBoardWithDetailsResponse
-			.GetStationBoardResult['lt5:trainServices']['lt5:service'];
+	// const parser = new XMLParser();
+	// let jObj = parser.parse(body);
+	// const data =
+	// 	jObj['soap:Envelope']['soap:Body'].GetArrBoardWithDetailsResponse
+	// 		.GetStationBoardResult['lt5:trainServices']['lt5:service'];
 	// console.log(data);
 
 	// const parsed = await parseString(body, (err, result) => {
@@ -69,15 +69,28 @@ export default async function Home() {
 	// const data = await response.toString();
 	// console.log(response);
 	// const xmlDoc = parser.parseFromString(text, 'text/xml');
+
+	const url =
+		'https://api1.raildata.org.uk/1010-live-arrival-board-arr/LDBWS/api/20220120/GetArrBoardWithDetails/HMD';
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'text/xml',
+			'x-apikey': process.env.xapikey,
+		},
+		cache: 'no-cache',
+	});
+	const data = await response.json();
+	console.log(data);
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between p-24'>
 			{/* {JSON.stringify(data)} */}
-			{data.map((train: Train, index: number) => {
+			{data.trainServices.map((train: Train, index: number) => {
 				return (
 					<div key={train['lt4:serviceID']} className='my-4'>
-						<div>Scheduled - {train['lt4:sta']}</div>
-						<div>ETA - {train['lt4:eta']}</div>
-						<div>Platform - {train['lt4:platform']}</div>
+						<div>Scheduled - {train.sta}</div>
+						<div>ETA - {train.eta}</div>
+						<div>Platform - {train.platform}</div>
 					</div>
 				);
 			})}
