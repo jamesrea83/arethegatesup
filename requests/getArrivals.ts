@@ -10,7 +10,9 @@ export default async function getArrivals(code: string) {
 			'Content-Type': 'text/xml',
 			'x-apikey': process.env.XAPIKEY,
 		},
-		cache: 'no-cache',
+		next: {
+			revalidate: 60,
+		},
 	});
 	const data = await response.json();
 	return data;
