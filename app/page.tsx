@@ -1,16 +1,19 @@
 // export const dynamic = 'force-dynamic';
+import { revalidatePath } from 'next/cache';
+
 import { TrainService } from '@/types/TrainService';
 import getArrivals from '@/requests/getArrivals';
-import MainPage from '@/app/Main';
+// import MainPage from '@/app/Main';
 
 export default async function Home() {
-	// const data = await getArrivals('HMD');
-	// console.log(data);
-	// if (!data) return <div>no data</div>;
+	revalidatePath('/');
+	const data = await getArrivals('HMD');
+	console.log(data);
+	if (!data) return <div>no data</div>;
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between p-24'>
-			<MainPage />
-			{/* {data?.trainServices?.map(
+			{/* <MainPage /> */}
+			{data?.trainServices?.map(
 				(service: TrainService, index: number) => {
 					return (
 						<div key={service.serviceID} className='my-4'>
@@ -20,7 +23,7 @@ export default async function Home() {
 						</div>
 					);
 				}
-			)} */}
+			)}
 		</main>
 	);
 }
