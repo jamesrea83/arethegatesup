@@ -21,6 +21,13 @@ const xmlBody = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envel
     </soap:Body>
 </soap:Envelope>`;
 
+interface Train {
+	'lt4:sta': string;
+	'lt4:eta': string;
+	'lt4:platform': string;
+	'lt4:serviceID': string;
+}
+
 export default async function Home() {
 	const url = 'https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb9.asmx';
 	const sampleHeaders = {
@@ -41,7 +48,7 @@ export default async function Home() {
 	const data =
 		jObj['soap:Envelope']['soap:Body'].GetArrBoardWithDetailsResponse
 			.GetStationBoardResult['lt5:trainServices']['lt5:service'];
-	console.log(data);
+	// console.log(data);
 
 	// const parsed = await parseString(body, (err, result) => {
 	// 	console.log(result['soap:Body']);
@@ -65,15 +72,12 @@ export default async function Home() {
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between p-24'>
 			{/* {JSON.stringify(data)} */}
-			{data.map(item => {
-				const keys = Object.keys(item);
+			{data.map((train: Train, index: number) => {
 				return (
-					<div className='my-4'>
-						{keys.map(key => (
-							<div>
-								{key} - {item[key].toString()}
-							</div>
-						))}
+					<div key={train['lt4:serviceID']} className='my-4'>
+						<div>Scheduled - {train['lt4:sta']}</div>
+						<div>ETA - {train['lt4:eta']}</div>
+						<div>Platform - {train['lt4:platform']}</div>
 					</div>
 				);
 			})}
