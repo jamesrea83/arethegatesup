@@ -5,10 +5,10 @@ export default async function Home() {
 	const data = await getAllData();
 	if (!data) return <div>no data</div>;
 	return (
-		<main className='flex min-h-screen w-full flex-col items-center justify-between p-24'>
+		<main className='flex min-h-screen w-full flex-col items-center justify-between p-6'>
 			{data?.map((service: TrainService, index: number) => {
 				const crossingTime = service?.crossingTrigger
-					?.toLocaleTimeString()
+					?.toLocaleTimeString('en-GB')
 					.slice(0, 5);
 				return (
 					<div key={service.serviceID} className='my-4 w-full'>
