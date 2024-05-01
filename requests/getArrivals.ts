@@ -1,23 +1,20 @@
-import { revalidatePath } from 'next/cache';
-import getBaseUrl from '@/requests/getBaseUrl';
+import { getBaseArrivalsUrl } from '@/requests/getBaseUrl';
 
 export default async function getArrivals(code: string) {
-	if (!process.env.XAPIKEY) return;
-	// revalidatePath('/');
-	const baseUrl = getBaseUrl();
+	if (!process.env.XAPIKEY_ARRIVALS) return;
+	const baseUrl = getBaseArrivalsUrl();
 	const url = `${baseUrl}/${code}`;
 	console.log('** fetching arrivals for', code);
 	const response = await fetch(url, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'text/xml',
-			'x-apikey': process.env.XAPIKEY,
+			'x-apikey': process.env.XAPIKEY_ARRIVALS,
 		},
-		// cache: 'no-cache',
 		next: {
 			revalidate: 60,
 		},
 	});
 	const data = await response.json();
-	return data;
+	return data.trainServices;
 }

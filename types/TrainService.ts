@@ -1,14 +1,18 @@
 import { PreviousCallingPoints } from '@/types/PreviousCallingPoints';
+import { SubsequentCallingPoints } from '@/types/SubsequentCallingPoints';
 import { Location } from '@/types/Location';
 
 export interface TrainService {
-	previousCallingPoints: PreviousCallingPoints[];
+	previousCallingPoints?: PreviousCallingPoints[];
+	subsequentCallingPoints?: SubsequentCallingPoints[];
 	futureCancellation: boolean;
 	futureDelay: boolean;
 	origin: Location[];
 	destination: Location[];
-	sta: string;
-	eta: string;
+	sta?: string;
+	std?: string;
+	eta?: string;
+	etd?: string;
 	platform: string;
 	operator: string;
 	operatorCode: string;

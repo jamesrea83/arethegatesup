@@ -13,8 +13,8 @@ export default function Client({ initialData }: Props) {
 			cache: 'no-cache',
 		});
 		const data = await response.json();
-		// console.log(data?.trainServices);
-		setData(data?.trainServices);
+		console.log(data);
+		setData(data);
 	};
 
 	useEffect(() => {

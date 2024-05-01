@@ -8,9 +8,9 @@ export default async function Route1() {
 	// revalidatePath('/route1');
 	const data = await getArrivals('HMD');
 	// console.log(data);
-	if (!data?.trainServices) return <div>no data</div>;
+	if (!data) return <div>no data</div>;
 	return (
-		<Client initialData={data.trainServices} />
+		<Client initialData={data} />
 		// <main className='flex min-h-screen flex-col items-center justify-between p-24'>
 		// 	{data?.trainServices?.map(
 		// 		(service: TrainService, index: number) => {
