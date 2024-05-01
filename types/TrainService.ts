@@ -24,4 +24,5 @@ export interface TrainService {
 	detachFront: boolean;
 	isReverseFormation: boolean;
 	serviceID: string;
+	crossingTrigger?: Date;
 }

@@ -2,6 +2,26 @@ import getArrivals from '@/requests/getArrivals';
 import getDepartures from '@/requests/getDepartures';
 import { TrainService } from '@/types/TrainService';
 
+const getTimeStampFromString = (timeString: string) => {
+	const timeArr = timeString.split(':');
+	const dateObject = new Date();
+	dateObject.setHours(Number(timeArr[0]));
+	dateObject.setMinutes(Number(timeArr[1]));
+	return dateObject;
+};
+
+const addMinutes = (dateObject: Date, mins: number) => {
+	const ms = mins * 60000;
+	const newDateObject = new Date(dateObject.getTime() + ms);
+	return newDateObject;
+};
+
+const subtractMinutes = (dateObject: Date, mins: number) => {
+	const ms = mins * 60000;
+	const newDateObject = new Date(dateObject.getTime() - ms);
+	return newDateObject;
+};
+
 export default async function getAllData() {
 	const arrivalsHMD = await getArrivals('HMD');
 	const arrivalsEBN = await getArrivals('EBN');
@@ -26,6 +46,36 @@ export default async function getAllData() {
 				trainService?.subsequentCallingPoints[0]?.callingPoint[0];
 			if (!nextStop || nextStop.crs === 'HMD') return false;
 			return true;
+		}
+	);
+
+	const estimatedArrivalsHMD = arrivalsHMD.map(
+		(trainService: TrainService) => {
+			if (!trainService.sta) return trainService;
+			const dateObject = getTimeStampFromString(trainService.sta);
+			const estimate = subtractMinutes(dateObject, 4);
+			trainService.crossingTrigger = estimate;
+			return trainService;
+		}
+	);
+
+	const estimatedFlyThroughEBNArrivals = flyThroughEBNArrivals.map(
+		(trainService: TrainService) => {
+			if (!trainService.sta) return trainService;
+			const dateObject = getTimeStampFromString(trainService.sta);
+			const estimate = subtractMinutes(dateObject, 8);
+			trainService.crossingTrigger = estimate;
+			return trainService;
+		}
+	);
+
+	const estimatedFlyThroughEBNDepartures = flyThroughEBNDepartures.map(
+		(trainService: TrainService) => {
+			if (!trainService.std) return trainService;
+			const dateObject = getTimeStampFromString(trainService.std);
+			const estimate = addMinutes(dateObject, 8);
+			trainService.crossingTrigger = estimate;
+			return trainService;
 		}
 	);
 
@@ -57,12 +107,14 @@ export default async function getAllData() {
 	// });
 
 	const consolidated = [
-		...arrivalsHMD,
-		...flyThroughEBNArrivals,
-		...flyThroughEBNDepartures,
+		...estimatedArrivalsHMD,
+		...estimatedFlyThroughEBNArrivals,
+		...estimatedFlyThroughEBNDepartures,
 	].sort((a: TrainService, b: TrainService) => {
-		const aTime = a.sta || a.std;
-		const bTime = b.sta || b.std;
+		// const aTime = a.sta || a.std;
+		// const bTime = b.sta || b.std;
+		const aTime = a.crossingTrigger;
+		const bTime = b.crossingTrigger;
 		if (!aTime || !bTime) return 0;
 
 		if (aTime < bTime) return -1;
@@ -70,6 +122,5 @@ export default async function getAllData() {
 		return 0;
 	});
 
-	console.log('total services', consolidated.length);
 	return consolidated;
 }
