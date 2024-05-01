@@ -3,7 +3,7 @@ import getArrivals from '@/requests/getArrivals';
 
 export default async function Route1() {
 	const data = await getArrivals('HMD');
-	console.log(data);
+	// console.log(data);
 	if (!data) return <div>no data</div>;
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between p-24'>

@@ -1,12 +1,13 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
-
 import { TrainService } from '@/types/TrainService';
 
-export default function MainPage() {
-	const [data, setData] = useState<TrainService[]>([]);
-	const router = useRouter();
+interface Props {
+	initialData: TrainService[];
+}
+
+export default function Client({ initialData }: Props) {
+	const [data, setData] = useState<TrainService[]>(initialData);
 	const fetchData = async () => {
 		const response = await fetch('api/arrivals?code=HMD', {
 			cache: 'no-cache',
@@ -18,12 +19,11 @@ export default function MainPage() {
 
 	useEffect(() => {
 		fetchData();
-		router.refresh();
 	}, []);
 
 	return (
-		<>
-			<Suspense>
+		<div className='flex min-h-screen flex-col items-center justify-between p-24'>
+			<Suspense fallback={<div>Loading</div>}>
 				{data?.map((service: TrainService) => {
 					return (
 						<div key={service.serviceID} className='my-4'>
@@ -34,6 +34,6 @@ export default function MainPage() {
 					);
 				})}
 			</Suspense>
-		</>
+		</div>
 	);
 }
