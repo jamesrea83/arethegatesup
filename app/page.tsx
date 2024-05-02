@@ -17,8 +17,9 @@ export default async function Home() {
 						? service?.minsTilEstimate
 						: 1;
 				const top = service?.minsTilEstimate
-					? index * 2 + minsPosition
+					? index + minsPosition
 					: index;
+				console.log(`***`, top);
 				return (
 					<div
 						key={service.serviceID}
