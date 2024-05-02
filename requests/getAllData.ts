@@ -92,13 +92,5 @@ export default async function getAllData() {
 		return 0;
 	});
 
-	consolidated.forEach((trainService: TrainService) => {
-		console.log(
-			'consolidated',
-			trainService.crossingTrigger,
-			trainService.minsTilEstimate
-		);
-	});
-
 	return consolidated;
 }
