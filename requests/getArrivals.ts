@@ -1,4 +1,5 @@
 import { getBaseArrivalsUrl } from '@/requests/getBaseUrl';
+import { TrainService } from '@/types/TrainService';
 
 export default async function getArrivals(code: string) {
 	if (!process.env.XAPIKEY_ARRIVALS) return;
@@ -16,5 +17,11 @@ export default async function getArrivals(code: string) {
 		},
 	});
 	const data = await response.json();
+	data.trainServices = data.trainServices.map(
+		(trainService: TrainService) => {
+			trainService.generatedAt = data.generatedAt;
+			return trainService;
+		}
+	);
 	return data.trainServices;
 }

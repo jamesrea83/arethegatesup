@@ -1,5 +1,5 @@
-const getMinsTilEstimate = (estimateDateObject: Date) => {
-	const nowDateObject = new Date();
+const getMinsTilEstimate = (generatedAt: string, estimateDateObject: Date) => {
+	const nowDateObject = new Date(generatedAt);
 	const msDifference = estimateDateObject.getTime() - nowDateObject.getTime();
 	const result = Math.round(msDifference / (1000 * 60));
 	// console.log('getMinsTilEstimate', msDifference, result);

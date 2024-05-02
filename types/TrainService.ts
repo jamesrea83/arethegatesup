@@ -26,4 +26,5 @@ export interface TrainService {
 	serviceID: string;
 	crossingTrigger?: Date;
 	minsTilEstimate?: number;
+	generatedAt: string;
 }

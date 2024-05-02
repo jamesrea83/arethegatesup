@@ -47,7 +47,10 @@ export default async function getAllData() {
 			const dateObject = getTimeStampFromString(arrival);
 			const estimate = subtractMinutes(dateObject, 3);
 			trainService.crossingTrigger = estimate;
-			const minsTilEstimate = getMinsTilEstimate(estimate);
+			const minsTilEstimate = getMinsTilEstimate(
+				trainService.generatedAt,
+				estimate
+			);
 			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
 		}
@@ -61,7 +64,10 @@ export default async function getAllData() {
 			const dateObject = getTimeStampFromString(arrival);
 			const estimate = subtractMinutes(dateObject, 6);
 			trainService.crossingTrigger = estimate;
-			const minsTilEstimate = getMinsTilEstimate(estimate);
+			const minsTilEstimate = getMinsTilEstimate(
+				trainService.generatedAt,
+				estimate
+			);
 			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
 		}
@@ -75,7 +81,10 @@ export default async function getAllData() {
 			const dateObject = getTimeStampFromString(arrival);
 			const estimate = addMinutes(dateObject, 6);
 			trainService.crossingTrigger = estimate;
-			const minsTilEstimate = getMinsTilEstimate(estimate);
+			const minsTilEstimate = getMinsTilEstimate(
+				trainService.generatedAt,
+				estimate
+			);
 			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
 		}
