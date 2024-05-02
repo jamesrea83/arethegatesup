@@ -19,7 +19,9 @@ export default async function getDepartures(code: string) {
 	const data = await response.json();
 	data.trainServices = data.trainServices.map(
 		(trainService: TrainService) => {
-			trainService.generatedAt = data.generatedAt;
+			const generatedDateObj = new Date(data.generatedAt);
+			const timeString = `${generatedDateObj.getHours()}:${generatedDateObj.getMinutes()}`;
+			trainService.generatedAt = timeString;
 			return trainService;
 		}
 	);
