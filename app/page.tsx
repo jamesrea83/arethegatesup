@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { TrainService } from '@/types/TrainService';
 import getAllData from '@/requests/getAllData';
 
@@ -6,6 +8,13 @@ export default async function Home() {
 	if (!data) return <div>no data</div>;
 	return (
 		<div className='h-full w-full relative'>
+			<Link
+				href='/verbose'
+				className='font-medium text-blue-600 dark:text-blue-500 hover:underline z-10'
+			>
+				/verbose
+			</Link>
+
 			{data?.map((service: TrainService, index: number) => {
 				const crossingTime = service?.crossingTrigger
 					?.toLocaleTimeString('en-GB')
