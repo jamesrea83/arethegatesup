@@ -1,0 +1,16 @@
+{
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit"
+	},
+	"editor.formatOnSave": true,
+	"editor.insertSpaces": false,
+	"editor.formatOnPaste": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+	"css.validate": false,
+	"editor.inlineSuggest.enabled": true,
+	"tailwindCSS.classAttributes": ["class", "className", "ngClass"],
+	"tailwindCSS.hovers": true
+}

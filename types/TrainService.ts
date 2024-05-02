@@ -25,4 +25,5 @@ export interface TrainService {
 	isReverseFormation: boolean;
 	serviceID: string;
 	crossingTrigger?: Date;
+	minsTilEstimate?: number;
 }

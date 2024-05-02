@@ -1,37 +1,26 @@
 import getArrivals from '@/requests/getArrivals';
 import getDepartures from '@/requests/getDepartures';
 import { TrainService } from '@/types/TrainService';
-
-const getTimeStampFromString = (timeString: string) => {
-	const timeArr = timeString.split(':');
-	const dateObject = new Date();
-	dateObject.setHours(Number(timeArr[0]));
-	dateObject.setMinutes(Number(timeArr[1]));
-	return dateObject;
-};
-
-const addMinutes = (dateObject: Date, mins: number) => {
-	const ms = mins * 60000;
-	const newDateObject = new Date(dateObject.getTime() + ms);
-	return newDateObject;
-};
-
-const subtractMinutes = (dateObject: Date, mins: number) => {
-	const ms = mins * 60000;
-	const newDateObject = new Date(dateObject.getTime() - ms);
-	return newDateObject;
-};
+import addMinutes from '@/utils/addMinutes';
+import subtractMinutes from '@/utils/subtractMinutes';
+import getTimeStampFromString from '@/utils/getTimeStampFromString';
+import getMinsTilEstimate from '@/utils/getMinsTilEstimate';
 
 export default async function getAllData() {
 	const arrivalsHMD = await getArrivals('HMD');
 	const arrivalsEBN = await getArrivals('EBN');
 	const departuresEBN = await getDepartures('EBN');
 
+	const filteredArrivalsHMD = arrivalsHMD.filter(
+		(trainService: TrainService) => !trainService?.isCancelled
+	);
+
 	const flyThroughEBNArrivals = arrivalsEBN.filter(
 		(trainService: TrainService) => {
-			if (!trainService?.previousCallingPoints) return false;
-			const callingPoints =
-				trainService?.previousCallingPoints[0]?.callingPoint;
+			const { previousCallingPoints, isCancelled } = trainService;
+			if (!previousCallingPoints) return false;
+			if (isCancelled) return false;
+			const callingPoints = previousCallingPoints[0]?.callingPoint;
 			const prevStop = callingPoints[callingPoints.length - 1];
 
 			if (!prevStop || prevStop.crs === 'HMD') return false;
@@ -41,84 +30,65 @@ export default async function getAllData() {
 
 	const flyThroughEBNDepartures = departuresEBN.filter(
 		(trainService: TrainService) => {
-			if (!trainService?.subsequentCallingPoints) return false;
-			const nextStop =
-				trainService?.subsequentCallingPoints[0]?.callingPoint[0];
+			const { subsequentCallingPoints, isCancelled } = trainService;
+			if (!subsequentCallingPoints) return false;
+			if (isCancelled) return false;
+			const nextStop = subsequentCallingPoints[0]?.callingPoint[0];
 			if (!nextStop || nextStop.crs === 'HMD') return false;
 			return true;
 		}
 	);
 
-	const estimatedArrivalsHMD = arrivalsHMD.map(
+	const estimatedArrivalsHMD = filteredArrivalsHMD.map(
 		(trainService: TrainService) => {
-			if (!trainService.sta) return trainService;
-			const dateObject = getTimeStampFromString(trainService.sta);
-			const estimate = subtractMinutes(dateObject, 4);
+			const { sta, eta } = trainService;
+			if (!sta || !eta) return trainService;
+			const arrival = eta === 'On time' ? sta : eta;
+			const dateObject = getTimeStampFromString(arrival);
+			const estimate = subtractMinutes(dateObject, 3);
 			trainService.crossingTrigger = estimate;
+			const minsTilEstimate = getMinsTilEstimate(estimate);
+			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
 		}
 	);
 
 	const estimatedFlyThroughEBNArrivals = flyThroughEBNArrivals.map(
 		(trainService: TrainService) => {
-			if (!trainService.sta) return trainService;
-			const dateObject = getTimeStampFromString(trainService.sta);
-			const estimate = subtractMinutes(dateObject, 8);
+			const { sta, eta } = trainService;
+			if (!sta || !eta) return trainService;
+			const arrival = eta === 'On time' ? sta : eta;
+			const dateObject = getTimeStampFromString(arrival);
+			const estimate = subtractMinutes(dateObject, 6);
 			trainService.crossingTrigger = estimate;
+			const minsTilEstimate = getMinsTilEstimate(estimate);
+			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
 		}
 	);
 
 	const estimatedFlyThroughEBNDepartures = flyThroughEBNDepartures.map(
 		(trainService: TrainService) => {
-			if (!trainService.std) return trainService;
-			const dateObject = getTimeStampFromString(trainService.std);
-			const estimate = addMinutes(dateObject, 8);
+			const { std, etd } = trainService;
+			if (!std || !etd) return trainService;
+			const arrival = etd === 'On time' ? std : etd;
+			const dateObject = getTimeStampFromString(arrival);
+			const estimate = addMinutes(dateObject, 6);
 			trainService.crossingTrigger = estimate;
+			const minsTilEstimate = getMinsTilEstimate(estimate);
+			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
 		}
 	);
-
-	// console.log('***************** arrivalsHMD', arrivalsHMD);
-
-	// console.log(
-	// 	'***************** flyThroughEBNArrivals',
-	// 	flyThroughEBNArrivals
-	// );
-	// flyThroughEBNArrivals.forEach((trainService: TrainService) => {
-	// 	if (!trainService?.previousCallingPoints) return false;
-	// 	const callingPoints =
-	// 		trainService?.previousCallingPoints[0]?.callingPoint;
-	// 	const prevStop = callingPoints[callingPoints.length - 1];
-	// 	console.log(
-	// 		`${trainService.serviceID} prev stop: ${prevStop.locationName}`
-	// 	);
-	// });
-
-	// console.log(
-	// 	'***************** flyThroughEBNDepartures',
-	// 	flyThroughEBNDepartures
-	// );
-	// flyThroughEBNDepartures.forEach((trainService: TrainService) => {
-	// 	if (!trainService?.subsequentCallingPoints) return false;
-	// 	console.log(
-	// 		`${trainService.serviceID} next stop: ${trainService?.subsequentCallingPoints[0]?.callingPoint[0].locationName}`
-	// 	);
-	// });
 
 	const consolidated = [
 		...estimatedArrivalsHMD,
 		...estimatedFlyThroughEBNArrivals,
 		...estimatedFlyThroughEBNDepartures,
 	].sort((a: TrainService, b: TrainService) => {
-		// const aTime = a.sta || a.std;
-		// const bTime = b.sta || b.std;
-		const aTime = a.crossingTrigger;
-		const bTime = b.crossingTrigger;
-		if (!aTime || !bTime) return 0;
-
-		if (aTime < bTime) return -1;
-		if (aTime > bTime) return 1;
+		if (!a.crossingTrigger || !b.crossingTrigger) return 0;
+		if (a.crossingTrigger < b.crossingTrigger) return -1;
+		if (a.crossingTrigger > b.crossingTrigger) return 1;
 		return 0;
 	});
 
