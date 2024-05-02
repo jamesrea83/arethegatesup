@@ -92,16 +92,13 @@ export default async function getAllData() {
 		return 0;
 	});
 
-	console.log('estimatedArrivalsHMD', estimatedArrivalsHMD.length);
-	console.log(
-		'estimatedFlyThroughEBNArrivals',
-		estimatedFlyThroughEBNArrivals.length
-	);
-	console.log(
-		'estimatedFlyThroughEBNDepartures',
-		estimatedFlyThroughEBNDepartures.length
-	);
-	console.log('consolidated', consolidated.length);
+	consolidated.forEach((trainService: TrainService) => {
+		console.log(
+			'consolidated',
+			trainService.crossingTrigger,
+			trainService.minsTilEstimate
+		);
+	});
 
 	return consolidated;
 }
