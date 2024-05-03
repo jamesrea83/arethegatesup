@@ -39,7 +39,7 @@ export default async function getProcessedData() {
 		);
 		const data: GatesEstimates = { ...gatesEstimate };
 		data.timeSinceLast = timeSinceLast;
-		if (gatesEstimate.gatesDown < prevTrain.gatesUp) {
+		if (gatesEstimate.gatesDown <= prevTrain.gatesUp) {
 			timingsData[timingsData.length - 1].gatesUp = gatesEstimate.gatesUp;
 			timingsData[timingsData.length - 1].gatesDownDuration =
 				getMinsBetween(

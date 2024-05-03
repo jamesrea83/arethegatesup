@@ -7,10 +7,10 @@ export default async function Home() {
 	if (!data) return <div>no data</div>;
 	return (
 		<div className='h-full w-full relative flex flex-col items-center p-4'>
-			<h1 className='text-lg'>
+			<h1 className='text-lg w-full'>
 				Are the gates up at Hampden Park level crossing?
 			</h1>
-			<p>Refresh page for fresh data</p>
+			<p className='w-full font-bold my-2'>Refresh page for fresh data</p>
 			{data?.map((train, index: number) => {
 				const gatesDown = train.gatesDown
 					?.toLocaleTimeString('en-GB')
@@ -21,37 +21,54 @@ export default async function Home() {
 				const duration = train.gatesDownDuration;
 				const timeSinceLast = train.timeSinceLast || 0;
 				return (
-					<>
+					<div
+						className='w-full m-0 p-0'
+						key={`${gatesDown}-${timeSinceLast}-${index}`}
+					>
 						{timeSinceLast ? (
 							<div
-								className='bg-green-500 w-full flex items-center justify-center p-1 m-1 min-h-6'
+								className='bg-green-500 w-full  min-h-6 overflow-hidden p-2 rounded-sm'
 								style={{ height: `${timeSinceLast}rem` }}
 							>
-								Open
+								<div className='font-bold'>
+									Gates up - {gatesUp}
+								</div>
+								Open for {timeSinceLast}m
 							</div>
 						) : null}
 						<div
-							key={gatesDown}
-							className='flex flex-col justify-between bg-red-500 w-full items-center p-1 m-1'
+							className=' bg-red-500 w-full p-2 my-2 rounded-sm'
 							style={{
 								height: `${duration}rem`,
 								// marginTop: `${timeSinceLast}rem`,
 							}}
 						>
-							<div>Gates down - {gatesDown}</div>
-							<div>Gates up - {gatesUp}</div>
+							<div className='font-bold'>
+								Gates down - {gatesDown}
+							</div>
+							<div>Closed for {duration}m</div>
+							{/* <div>Gates up - {gatesUp}</div> */}
 							{/* <div>{train.gatesDownDuration}</div> */}
 						</div>
-					</>
+					</div>
 				);
 			})}
-			<p>Disclaimer - everything here is just a guess.</p>
+			<p className='py-2'>
+				Disclaimer - everything here is just a guess.
+			</p>
 			<Link
 				href='/verbose'
-				className='font-medium text-blue-600 dark:text-blue-500 hover:underline z-10'
+				className='font-medium text-blue-600 dark:text-blue-500 hover:underline z-10 py-4'
 			>
 				/verbose
 			</Link>
+			<Link
+				href='github'
+				className='font-medium text-blue-600 dark:text-blue-500 hover:underline z-10 py-4'
+			>
+				github
+			</Link>
+			<p className='pb-4'>© James Rea 2024</p>
 		</div>
 	);
 }
