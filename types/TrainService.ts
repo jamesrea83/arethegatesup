@@ -1,5 +1,6 @@
 import { PreviousCallingPoints } from '@/types/PreviousCallingPoints';
 import { SubsequentCallingPoints } from '@/types/SubsequentCallingPoints';
+import { GatesEstimates } from '@/types/GatesEstimates';
 import { Location } from '@/types/Location';
 
 export interface TrainService {
@@ -27,4 +28,5 @@ export interface TrainService {
 	crossingTrigger?: Date;
 	minsTilEstimate?: number;
 	generatedAt: string;
+	gatesEstimates?: GatesEstimates;
 }

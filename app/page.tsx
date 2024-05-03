@@ -14,6 +14,12 @@ export default async function Home() {
 			>
 				/verbose
 			</Link>
+			<Link
+				href='/prototype'
+				className='font-medium text-blue-600 dark:text-blue-500 hover:underline z-10'
+			>
+				/prototype
+			</Link>
 
 			{data?.map((service: TrainService, index: number) => {
 				const crossingTime = service?.crossingTrigger
