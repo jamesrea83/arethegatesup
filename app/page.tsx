@@ -62,12 +62,6 @@ export default async function Home() {
 			>
 				/verbose
 			</Link>
-			<Link
-				href='github'
-				className='font-medium text-blue-600 dark:text-blue-500 hover:underline z-10 py-4'
-			>
-				github
-			</Link>
 			<p className='pb-4'>© James Rea 2024</p>
 		</div>
 	);
