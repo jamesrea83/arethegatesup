@@ -41,6 +41,11 @@ export default async function getProcessedData() {
 		data.timeSinceLast = timeSinceLast;
 		if (gatesEstimate.gatesDown < prevTrain.gatesUp) {
 			timingsData[timingsData.length - 1].gatesUp = gatesEstimate.gatesUp;
+			timingsData[timingsData.length - 1].gatesDownDuration =
+				getMinsBetween(
+					gatesEstimate.gatesUp,
+					timingsData[timingsData.length - 1].gatesDown
+				);
 			return;
 		}
 		timingsData.push(data);
