@@ -18,6 +18,9 @@ export default async function Home() {
 				const gatesUp = train.gatesUp
 					?.toLocaleTimeString('en-GB')
 					.slice(0, 5);
+				const lastGatesUp = train.lastGatesUp
+					?.toLocaleTimeString('en-GB')
+					.slice(0, 5);
 				const duration = train.gatesDownDuration;
 				const timeSinceLast = train.timeSinceLast || 0;
 				return (
@@ -25,29 +28,29 @@ export default async function Home() {
 						className='w-full m-0 p-0'
 						key={`${gatesDown}-${timeSinceLast}-${index}`}
 					>
-						{timeSinceLast ? (
+						{timeSinceLast && lastGatesUp ? (
 							<div
-								className='bg-green-500 w-full  min-h-8 overflow-hidden py-1 px-2 rounded-sm font-bold'
+								className='bg-green-500 w-full min-h-8 overflow-hidden py-1 px-2 rounded-sm'
 								style={{ height: `${timeSinceLast}rem` }}
 							>
-								{/* <div className='font-bold'>
-									Gates up - {gatesUp}
-								</div> */}
-								Open for {timeSinceLast}m
+								<div className='font-bold'>
+									{lastGatesUp} - Gates up
+								</div>
+								<div>Open for {timeSinceLast}m</div>
 							</div>
 						) : null}
 						<div
-							className=' bg-red-500 w-full flex flex-col justify-between py-1 px-2 my-2 rounded-sm'
+							className=' bg-red-500 w-full py-1 px-2 my-2 rounded-sm'
 							style={{
 								height: `${duration}rem`,
 								// marginTop: `${timeSinceLast}rem`,
 							}}
 						>
 							<div className='font-bold'>
-								Gates down - {gatesDown}
+								{gatesDown} - Gates down
 							</div>
-							{/* <div>Closed for {duration}m</div> */}
-							<div>Gates up - {gatesUp}</div>
+							<div>Closed for {duration}m</div>
+							{/* <div>Gates up - {gatesUp}</div> */}
 							{/* <div>{train.gatesDownDuration}</div> */}
 						</div>
 					</div>
