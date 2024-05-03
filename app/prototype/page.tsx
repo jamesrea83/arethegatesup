@@ -28,7 +28,7 @@ export default async function Home() {
 						)}
 						<div
 							key={gatesDown}
-							className='flex flex-col justify-between bg-red-400 w-full flex items-center justify-center'
+							className='flex flex-col justify-between bg-red-400 w-full items-center'
 							style={{
 								height: `${duration}rem`,
 								// marginTop: `${timeSinceLast}rem`,

@@ -26,7 +26,7 @@ export default async function getProcessedData() {
 		});
 
 	const timingsData: GatesEstimates[] = [];
-	upDownData.forEach((gatesEstimate: GatesEstimates) => {
+	upDownData.forEach(gatesEstimate => {
 		if (!gatesEstimate) return;
 		if (!timingsData.length) {
 			timingsData.push(gatesEstimate);
@@ -37,12 +37,13 @@ export default async function getProcessedData() {
 			gatesEstimate.gatesDown,
 			prevTrain.gatesUp
 		);
-		gatesEstimate.timeSinceLast = timeSinceLast;
+		const data: GatesEstimates = { ...gatesEstimate };
+		data.timeSinceLast = timeSinceLast;
 		if (gatesEstimate.gatesDown < prevTrain.gatesUp) {
 			timingsData[timingsData.length - 1].gatesUp = gatesEstimate.gatesUp;
 			return;
 		}
-		timingsData.push(gatesEstimate);
+		timingsData.push(data);
 	});
 
 	return timingsData;
