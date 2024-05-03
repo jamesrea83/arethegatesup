@@ -27,17 +27,17 @@ export default async function Home() {
 					>
 						{timeSinceLast ? (
 							<div
-								className='bg-green-500 w-full  min-h-6 overflow-hidden p-2 rounded-sm'
+								className='bg-green-500 w-full  min-h-8 overflow-hidden py-1 px-2 rounded-sm font-bold'
 								style={{ height: `${timeSinceLast}rem` }}
 							>
-								<div className='font-bold'>
+								{/* <div className='font-bold'>
 									Gates up - {gatesUp}
-								</div>
+								</div> */}
 								Open for {timeSinceLast}m
 							</div>
 						) : null}
 						<div
-							className=' bg-red-500 w-full p-2 my-2 rounded-sm'
+							className=' bg-red-500 w-full flex flex-col justify-between py-1 px-2 my-2 rounded-sm'
 							style={{
 								height: `${duration}rem`,
 								// marginTop: `${timeSinceLast}rem`,
@@ -46,8 +46,8 @@ export default async function Home() {
 							<div className='font-bold'>
 								Gates down - {gatesDown}
 							</div>
-							<div>Closed for {duration}m</div>
-							{/* <div>Gates up - {gatesUp}</div> */}
+							{/* <div>Closed for {duration}m</div> */}
+							<div>Gates up - {gatesUp}</div>
 							{/* <div>{train.gatesDownDuration}</div> */}
 						</div>
 					</div>
