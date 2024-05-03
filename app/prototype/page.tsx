@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import Link from 'next/link';
 
 import getProcessedData from '@/requests/getProcessedData';
 
@@ -41,6 +41,12 @@ export default async function Home() {
 					</>
 				);
 			})}
+			<Link
+				href='/verbose'
+				className='font-medium text-blue-600 dark:text-blue-500 hover:underline z-10'
+			>
+				/verbose
+			</Link>
 		</div>
 	);
 }
