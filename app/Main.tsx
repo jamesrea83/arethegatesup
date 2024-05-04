@@ -23,17 +23,34 @@ export default function MainPage({ cachedData }: Props) {
 		<>
 			<Suspense>
 				{data?.map((train, index: number) => {
-					const gatesDown = train.gatesDown
-						?.toTimeString()
-						.slice(0, 5);
+					// const gatesDown = train.gatesDown
+					// 	?.toTimeString()
+					// 	.slice(0, 5);
 
-					console.log('*** train', train);
-					console.log('*** gatesDown', gatesDown);
-
-					const gatesUp = train.gatesUp?.toTimeString().slice(0, 5);
-					const lastGatesUp = train.lastGatesUp
-						?.toTimeString()
+					const gatesDown = new Date(
+						train.gatesDown.getTime() +
+							train.gatesDown.getTimezoneOffset() * 60000
+					)
+						.toTimeString()
 						.slice(0, 5);
+					const gatesUp = new Date(
+						train.gatesUp.getTime() +
+							train.gatesUp.getTimezoneOffset() * 60000
+					)
+						.toTimeString()
+						.slice(0, 5);
+					// const gatesUp = train.gatesUp?.toTimeString().slice(0, 5);
+					// const lastGatesUp = train.lastGatesUp
+					// 	?.toTimeString()
+					// 	.slice(0, 5);
+					const lastGatesUp =
+						train.lastGatesUp &&
+						new Date(
+							train.lastGatesUp.getTime() +
+								train.gatesDown.getTimezoneOffset() * 60000
+						)
+							.toTimeString()
+							.slice(0, 5);
 					const duration = train.gatesDownDuration;
 					const timeSinceLast = train.timeSinceLast || 0;
 					return (
