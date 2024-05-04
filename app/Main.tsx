@@ -1,35 +1,69 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
 
-import { TrainService } from '@/types/TrainService';
+import getProcessedData from '@/requests/getProcessedData';
+import { GatesEstimates } from '@/types/GatesEstimates';
 
-export default function MainPage() {
-	const [data, setData] = useState<TrainService[]>([]);
-	const router = useRouter();
-	const fetchData = async () => {
-		const response = await fetch('api/arrivals?code=HMD', {
-			cache: 'no-cache',
-		});
-		const data = await response.json();
-		// console.log(data?.trainServices);
-		setData(data?.trainServices);
-	};
+interface Props {
+	cachedData: GatesEstimates[];
+}
+
+export default function MainPage({ cachedData }: Props) {
+	const [data, setData] = useState<GatesEstimates[]>(cachedData);
 
 	useEffect(() => {
+		const fetchData = async () => {
+			const data = await getProcessedData();
+			setData(data);
+		};
 		fetchData();
-		router.refresh();
 	}, []);
 
 	return (
 		<>
 			<Suspense>
-				{data?.map((service: TrainService) => {
+				{data?.map((train, index: number) => {
+					const gatesDown = train.gatesDown
+						?.toLocaleTimeString('en-GB')
+						.slice(0, 5);
+					const gatesUp = train.gatesUp
+						?.toLocaleTimeString('en-GB')
+						.slice(0, 5);
+					const lastGatesUp = train.lastGatesUp
+						?.toLocaleTimeString('en-GB')
+						.slice(0, 5);
+					const duration = train.gatesDownDuration;
+					const timeSinceLast = train.timeSinceLast || 0;
 					return (
-						<div key={service.serviceID} className='my-4'>
-							<div>Scheduled - {service.sta}</div>
-							<div>ETA - {service.eta}</div>
-							<div>Platform - {service.platform}</div>
+						<div
+							className='w-full m-0 p-0'
+							key={`${gatesDown}-${timeSinceLast}-${index}`}
+						>
+							{timeSinceLast && lastGatesUp ? (
+								<div
+									className='bg-green-500 w-full min-h-8 overflow-hidden py-1 px-2 rounded-sm'
+									style={{ height: `${timeSinceLast}rem` }}
+								>
+									<div className='font-bold'>
+										{lastGatesUp} - Gates up
+									</div>
+									<div>Open for {timeSinceLast}m</div>
+								</div>
+							) : null}
+							<div
+								className=' bg-red-500 w-full py-1 px-2 my-2 rounded-sm'
+								style={{
+									height: `${duration}rem`,
+									// marginTop: `${timeSinceLast}rem`,
+								}}
+							>
+								<div className='font-bold'>
+									{gatesDown} - Gates down
+								</div>
+								<div>Closed for {duration}m</div>
+								{/* <div>Gates up - {gatesUp}</div> */}
+								{/* <div>{train.gatesDownDuration}</div> */}
+							</div>
 						</div>
 					);
 				})}
