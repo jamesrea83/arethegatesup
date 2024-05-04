@@ -24,13 +24,11 @@ export default function MainPage({ cachedData }: Props) {
 			<Suspense>
 				{data?.map((train, index: number) => {
 					const gatesDown = train.gatesDown
-						?.toLocaleTimeString('en-GB')
+						?.toTimeString()
 						.slice(0, 5);
-					const gatesUp = train.gatesUp
-						?.toLocaleTimeString('en-GB')
-						.slice(0, 5);
+					const gatesUp = train.gatesUp?.toTimeString().slice(0, 5);
 					const lastGatesUp = train.lastGatesUp
-						?.toLocaleTimeString('en-GB')
+						?.toTimeString()
 						.slice(0, 5);
 					const duration = train.gatesDownDuration;
 					const timeSinceLast = train.timeSinceLast || 0;
