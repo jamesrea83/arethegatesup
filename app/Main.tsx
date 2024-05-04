@@ -26,9 +26,10 @@ export default function MainPage({ cachedData }: Props) {
 					const gatesDown = train.gatesDown
 						?.toTimeString()
 						.slice(0, 5);
-					if (gatesDown === undefined) {
-						console.log(gatesDown);
-					}
+
+					console.log('*** train', train);
+					console.log('*** gatesDown', gatesDown);
+
 					const gatesUp = train.gatesUp?.toTimeString().slice(0, 5);
 					const lastGatesUp = train.lastGatesUp
 						?.toTimeString()
