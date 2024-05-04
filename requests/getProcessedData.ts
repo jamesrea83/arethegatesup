@@ -1,3 +1,4 @@
+'use server';
 import getArrivalsHMD from '@/requests/getArrivalsHMD';
 import getFlyThroughEBNArrivals from '@/requests/getFlyThroughEBNArrivals';
 import getFlyThroughEBNDepartures from '@/requests/getFlyThroughEBNDepartures';

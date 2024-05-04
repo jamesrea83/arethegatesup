@@ -1,3 +1,4 @@
+'use server';
 import getArrivals from '@/requests/getArrivals';
 import { TrainService } from '@/types/TrainService';
 import addMinutes from '@/utils/addMinutes';
@@ -7,11 +8,11 @@ import getMinsTilEstimate from '@/utils/getMinsTilEstimate';
 
 export default async function getArrivalsHMD() {
 	const arrivalsHMD = await getArrivals('HMD');
-	const filteredArrivalsHMD = arrivalsHMD.filter(
+	const filteredArrivalsHMD = arrivalsHMD?.filter(
 		(trainService: TrainService) => !trainService?.isCancelled
 	);
 
-	return filteredArrivalsHMD.map((trainService: TrainService) => {
+	return filteredArrivalsHMD?.map((trainService: TrainService) => {
 		const { sta, eta } = trainService;
 		if (!sta || !eta) return trainService;
 		const arrival = eta === 'On time' ? sta : eta;
