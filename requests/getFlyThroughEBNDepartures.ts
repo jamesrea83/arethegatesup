@@ -1,4 +1,3 @@
-'use server';
 import getDepartures from '@/requests/getDepartures';
 import { TrainService } from '@/types/TrainService';
 import addMinutes from '@/utils/addMinutes';
