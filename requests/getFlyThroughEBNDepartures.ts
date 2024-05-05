@@ -26,12 +26,13 @@ export default async function getFlyThroughEBNDepartures() {
 		const dateObject = getTimeStampFromString(arrival);
 
 		const gatesEstimates = {
-			gatesDown: addMinutes(dateObject, 6),
-			gatesUp: addMinutes(dateObject, 9),
-			gatesDownDuration: 6,
+			gatesDown: addMinutes(dateObject, 3),
+			gatesUp: addMinutes(dateObject, 4),
+			gatesDownDuration: 1,
 		};
 
 		trainService.gatesEstimates = gatesEstimates;
+		trainService.info = 'EBN Departure';
 
 		return trainService;
 	});

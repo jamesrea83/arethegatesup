@@ -1,5 +1,6 @@
-import getArrivals from '@/requests/getArrivals';
-import getDepartures from '@/requests/getDepartures';
+import getArrivalsHMD from '@/requests/getArrivalsHMD';
+import getFlyThroughEBNArrivals from '@/requests/getFlyThroughEBNArrivals';
+import getFlyThroughEBNDepartures from '@/requests/getFlyThroughEBNDepartures';
 import { TrainService } from '@/types/TrainService';
 import addMinutes from '@/utils/addMinutes';
 import subtractMinutes from '@/utils/subtractMinutes';
@@ -7,9 +8,9 @@ import getTimeStampFromString from '@/utils/getTimeStampFromString';
 import getMinsTilEstimate from '@/utils/getMinsTilEstimate';
 
 export default async function getAllData() {
-	const arrivalsHMD = await getArrivals('HMD');
-	const arrivalsEBN = await getArrivals('EBN');
-	const departuresEBN = await getDepartures('EBN');
+	const arrivalsHMD = await getArrivalsHMD();
+	const arrivalsEBN = await getFlyThroughEBNArrivals();
+	const departuresEBN = await getFlyThroughEBNDepartures();
 
 	const filteredArrivalsHMD = arrivalsHMD.filter(
 		(trainService: TrainService) => !trainService?.isCancelled

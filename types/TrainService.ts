@@ -29,4 +29,5 @@ export interface TrainService {
 	minsTilEstimate?: number;
 	generatedAt: string;
 	gatesEstimates?: GatesEstimates;
+	info?: string;
 }

@@ -3,6 +3,7 @@ import { useEffect, useState, Suspense } from 'react';
 
 import getProcessedData from '@/requests/getProcessedData';
 import { GatesEstimates } from '@/types/GatesEstimates';
+import getTZOffsetTime from '@/utils/getTZOffsetTime';
 
 interface Props {
 	cachedData: GatesEstimates[];
@@ -23,34 +24,11 @@ export default function MainPage({ cachedData }: Props) {
 		<>
 			<Suspense>
 				{data?.map((train, index: number) => {
-					// const gatesDown = train.gatesDown
-					// 	?.toTimeString()
-					// 	.slice(0, 5);
+					const gatesDown = getTZOffsetTime(train.gatesDown);
 
-					const gatesDown = new Date(
-						train.gatesDown.getTime() +
-							train.gatesDown.getTimezoneOffset() * 60000
-					)
-						.toTimeString()
-						.slice(0, 5);
-					const gatesUp = new Date(
-						train.gatesUp.getTime() +
-							train.gatesUp.getTimezoneOffset() * 60000
-					)
-						.toTimeString()
-						.slice(0, 5);
-					// const gatesUp = train.gatesUp?.toTimeString().slice(0, 5);
-					// const lastGatesUp = train.lastGatesUp
-					// 	?.toTimeString()
-					// 	.slice(0, 5);
 					const lastGatesUp =
-						train.lastGatesUp &&
-						new Date(
-							train.lastGatesUp.getTime() +
-								train.gatesDown.getTimezoneOffset() * 60000
-						)
-							.toTimeString()
-							.slice(0, 5);
+						train.lastGatesUp && getTZOffsetTime(train.lastGatesUp);
+
 					const duration = train.gatesDownDuration;
 					const timeSinceLast = train.timeSinceLast || 0;
 					return (
@@ -63,25 +41,28 @@ export default function MainPage({ cachedData }: Props) {
 									className='bg-green-500 w-full min-h-8 overflow-hidden py-1 px-2 rounded-sm'
 									style={{ height: `${timeSinceLast}rem` }}
 								>
-									<div className='font-bold'>
-										{lastGatesUp} - Gates up
+									<div>
+										<span className='font-bold'>
+											{lastGatesUp} - Gates up
+										</span>{' '}
+										for {timeSinceLast}m
 									</div>
-									<div>Open for {timeSinceLast}m</div>
+									{/* <div>Open for {timeSinceLast}m</div> */}
 								</div>
 							) : null}
 							<div
-								className=' bg-red-500 w-full py-1 px-2 my-2 rounded-sm'
+								className=' bg-red-500 w-full min-h-8 py-1 px-2 my-2 rounded-sm'
 								style={{
 									height: `${duration}rem`,
-									// marginTop: `${timeSinceLast}rem`,
 								}}
 							>
-								<div className='font-bold'>
-									{gatesDown} - Gates down
+								<div>
+									<span className='font-bold'>
+										{gatesDown} - Gates down
+									</span>{' '}
+									for {duration}m
 								</div>
-								<div>Closed for {duration}m</div>
-								{/* <div>Gates up - {gatesUp}</div> */}
-								{/* <div>{train.gatesDownDuration}</div> */}
+								{/* <div>Closed for {duration}m</div> */}
 							</div>
 						</div>
 					);

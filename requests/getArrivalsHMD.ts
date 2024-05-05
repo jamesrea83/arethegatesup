@@ -12,6 +12,7 @@ export default async function getArrivalsHMD() {
 	);
 
 	return filteredArrivalsHMD.map((trainService: TrainService) => {
+		console.log('********* ADDING INFO');
 		const { sta, eta } = trainService;
 		if (!sta || !eta) return trainService;
 		const arrival = eta === 'On time' ? sta : eta;
@@ -24,6 +25,7 @@ export default async function getArrivalsHMD() {
 		};
 
 		trainService.gatesEstimates = gatesEstimates;
+		trainService.info = 'HMD Arrival';
 
 		return trainService;
 	});

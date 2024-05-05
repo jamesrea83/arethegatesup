@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import getTZOffsetTime from '@/utils/getTZOffsetTime';
 import { TrainService } from '@/types/TrainService';
 import getAllData from '@/requests/getAllData';
 
@@ -13,6 +14,10 @@ export default async function Home() {
 					?.toLocaleTimeString('en-GB')
 					.slice(0, 5);
 
+				const gatesDown =
+					service?.gatesEstimates?.gatesDown &&
+					getTZOffsetTime(service?.gatesEstimates?.gatesDown);
+
 				return (
 					<div
 						key={service.serviceID}
@@ -22,8 +27,9 @@ export default async function Home() {
 						<div>Scheduled - {service.sta || service.std}</div>
 						<div>ETA - {service.eta || service.etd}</div>
 						<div>Platform - {service.platform}</div>
+						<div>Info - {service.info}</div>
 						<div className='font-bold'>
-							Gates down estimate - {crossingTime}
+							Gates down estimate - {gatesDown}
 						</div>
 					</div>
 				);
