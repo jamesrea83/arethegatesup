@@ -14,7 +14,6 @@ export default async function getProcessedData() {
 	let upDownData = [...arrivalsHMD, ...arrivalsEBN, ...departuresEBN]
 		.map((trainService: TrainService) => {
 			const { gatesEstimates } = trainService;
-			// console.log(trainService);
 			if (!gatesEstimates) return;
 			const { gatesDown, gatesUp, gatesDownDuration } = gatesEstimates;
 			return { gatesDown, gatesUp, gatesDownDuration };

@@ -5,7 +5,6 @@ export default async function getDepartures(code: string) {
 	if (!process.env.XAPIKEY_DEPARTURES) return;
 	const baseUrl = getBaseDeparturesUrl();
 	const url = `${baseUrl}/${code}`;
-	console.log('** fetching departures for', code);
 	const response = await fetch(url, {
 		method: 'GET',
 		headers: {
