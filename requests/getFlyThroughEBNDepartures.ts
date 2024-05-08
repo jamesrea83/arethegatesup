@@ -1,18 +1,17 @@
 import getDepartures from '@/requests/getDepartures';
 import { TrainService } from '@/types/TrainService';
 import addMinutes from '@/utils/addMinutes';
-import subtractMinutes from '@/utils/subtractMinutes';
 import getTimeStampFromString from '@/utils/getTimeStampFromString';
-import getMinsTilEstimate from '@/utils/getMinsTilEstimate';
 
 export default async function getFlyThroughEBNDepartures() {
 	const departuresEBN = await getDepartures('EBN');
 
 	const flyThroughEBNDepartures = departuresEBN.filter(
 		(trainService: TrainService) => {
-			const { subsequentCallingPoints, isCancelled } = trainService;
+			const { subsequentCallingPoints, isCancelled, eta } = trainService;
 			if (!subsequentCallingPoints) return false;
 			if (isCancelled) return false;
+			if (eta === 'Delayed') return false;
 			const nextStop = subsequentCallingPoints[0]?.callingPoint[0];
 			if (!nextStop || nextStop.crs === 'HMD') return false;
 			return true;
@@ -26,8 +25,8 @@ export default async function getFlyThroughEBNDepartures() {
 		const dateObject = getTimeStampFromString(arrival);
 
 		const gatesEstimates = {
-			gatesDown: addMinutes(dateObject, 3),
-			gatesUp: addMinutes(dateObject, 4),
+			gatesDown: addMinutes(dateObject, 4),
+			gatesUp: addMinutes(dateObject, 5),
 			gatesDownDuration: 1,
 		};
 

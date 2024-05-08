@@ -24,6 +24,7 @@ export default function MainPage({ cachedData }: Props) {
 		<>
 			<Suspense>
 				{data?.map((train, index: number) => {
+					// console.log('*** train', train);
 					const gatesDown = getTZOffsetTime(train.gatesDown);
 
 					const lastGatesUp =
