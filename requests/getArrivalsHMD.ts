@@ -19,9 +19,9 @@ export default async function getArrivalsHMD() {
 		const dateObject = getTimeStampFromString(arrival);
 
 		const gatesEstimates = {
-			gatesDown: subtractMinutes(dateObject, 3),
-			gatesUp: addMinutes(dateObject, 3),
-			gatesDownDuration: 6,
+			gatesDown: subtractMinutes(dateObject, 2),
+			gatesUp: addMinutes(dateObject, 1),
+			gatesDownDuration: 4,
 		};
 
 		trainService.gatesEstimates = gatesEstimates;
