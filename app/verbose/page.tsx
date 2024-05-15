@@ -18,6 +18,10 @@ export default async function Home() {
 					service?.gatesEstimates?.gatesDown &&
 					getTZOffsetTime(service?.gatesEstimates?.gatesDown);
 
+				const gatesUp =
+					service?.gatesEstimates?.gatesUp &&
+					getTZOffsetTime(service?.gatesEstimates?.gatesUp);
+
 				return (
 					<div
 						key={service.serviceID}
@@ -30,6 +34,9 @@ export default async function Home() {
 						<div>Info - {service.info}</div>
 						<div className='font-bold'>
 							Gates down estimate - {gatesDown}
+						</div>
+						<div className='font-bold'>
+							Gates up estimate - {gatesUp}
 						</div>
 					</div>
 				);
