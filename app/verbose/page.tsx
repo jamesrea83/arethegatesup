@@ -3,8 +3,9 @@ import Link from 'next/link';
 import getTZOffsetTime from '@/utils/getTZOffsetTime';
 import { TrainService } from '@/types/TrainService';
 import getAllData from '@/requests/getAllData';
+import Footer from '@/app/Footer';
 
-export default async function Home() {
+export default async function Verbose() {
 	const data = await getAllData();
 	if (!data) return <div>no data</div>;
 	return (
@@ -47,7 +48,7 @@ export default async function Home() {
 			>
 				home
 			</Link>
-			<p className='pb-4'>© James Rea 2024</p>
+			<Footer />
 		</div>
 	);
 }
