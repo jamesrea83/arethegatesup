@@ -25,8 +25,8 @@ export default async function getFlyThroughEBNDepartures() {
 		const dateObject = getTimeStampFromString(arrival);
 
 		const gatesEstimates = {
-			gatesDown: addMinutes(dateObject, 4),
-			gatesUp: addMinutes(dateObject, 5),
+			gatesDown: addMinutes(dateObject, 2),
+			gatesUp: addMinutes(dateObject, 3),
 			gatesDownDuration: 1,
 		};
 
