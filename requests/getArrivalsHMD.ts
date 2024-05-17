@@ -19,14 +19,20 @@ export default async function getArrivalsHMD() {
 		if (!sta || !eta) return trainService;
 		const arrival = eta === 'On time' ? sta : eta;
 		const dateObject = getTimeStampFromString(arrival);
+		if (trainService.platform === '1') {
+			trainService.gatesEstimates = {
+				gatesDown: subtractMinutes(dateObject, 1),
+				gatesUp: addMinutes(dateObject, 1),
+				gatesDownDuration: 3,
+			};
+		} else {
+			trainService.gatesEstimates = {
+				gatesDown: subtractMinutes(dateObject, 2),
+				gatesUp: addMinutes(dateObject, 0),
+				gatesDownDuration: 2,
+			};
+		}
 
-		const gatesEstimates = {
-			gatesDown: subtractMinutes(dateObject, 2),
-			gatesUp: addMinutes(dateObject, 1),
-			gatesDownDuration: 4,
-		};
-
-		trainService.gatesEstimates = gatesEstimates;
 		trainService.info = 'HMD Arrival';
 
 		return trainService;
