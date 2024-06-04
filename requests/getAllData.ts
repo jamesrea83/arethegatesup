@@ -40,8 +40,9 @@ export default async function getAllData() {
 		}
 	);
 
-	const estimatedArrivalsHMD = filteredArrivalsHMD.map(
-		(trainService: TrainService) => {
+	const estimatedArrivalsHMD =
+		filteredArrivalsHMD &&
+		filteredArrivalsHMD.map((trainService: TrainService) => {
 			const { sta, eta } = trainService;
 			if (!sta || !eta) return trainService;
 			const arrival = eta === 'On time' ? sta : eta;
@@ -54,11 +55,11 @@ export default async function getAllData() {
 			);
 			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
-		}
-	);
+		});
 
-	const estimatedFlyThroughEBNArrivals = flyThroughEBNArrivals.map(
-		(trainService: TrainService) => {
+	const estimatedFlyThroughEBNArrivals =
+		flyThroughEBNArrivals &&
+		flyThroughEBNArrivals.map((trainService: TrainService) => {
 			const { sta, eta } = trainService;
 			if (!sta || !eta) return trainService;
 			const arrival = eta === 'On time' ? sta : eta;
@@ -71,11 +72,11 @@ export default async function getAllData() {
 			);
 			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
-		}
-	);
+		});
 
-	const estimatedFlyThroughEBNDepartures = flyThroughEBNDepartures.map(
-		(trainService: TrainService) => {
+	const estimatedFlyThroughEBNDepartures =
+		flyThroughEBNDepartures &&
+		flyThroughEBNDepartures.map((trainService: TrainService) => {
 			const { std, etd } = trainService;
 			if (!std || !etd) return trainService;
 			const arrival = etd === 'On time' ? std : etd;
@@ -88,8 +89,7 @@ export default async function getAllData() {
 			);
 			trainService.minsTilEstimate = minsTilEstimate;
 			return trainService;
-		}
-	);
+		});
 
 	const consolidated = [
 		...estimatedArrivalsHMD,

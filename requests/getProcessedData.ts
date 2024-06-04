@@ -27,31 +27,33 @@ export default async function getProcessedData() {
 		});
 
 	const timingsData: GatesEstimates[] = [];
-	upDownData.forEach(gatesEstimate => {
-		if (!gatesEstimate) return;
-		if (!timingsData.length) {
-			timingsData.push(gatesEstimate);
-			return;
-		}
-		const prevTrain = timingsData[timingsData.length - 1];
-		const timeSinceLast = getMinsBetween(
-			gatesEstimate.gatesDown,
-			prevTrain.gatesUp
-		);
-		const data: GatesEstimates = { ...gatesEstimate };
-		data.timeSinceLast = timeSinceLast;
-		data.lastGatesUp = timingsData[timingsData.length - 1].gatesUp;
-		if (gatesEstimate.gatesDown <= prevTrain.gatesUp) {
-			timingsData[timingsData.length - 1].gatesUp = gatesEstimate.gatesUp;
-			timingsData[timingsData.length - 1].gatesDownDuration =
-				getMinsBetween(
-					gatesEstimate.gatesUp,
-					timingsData[timingsData.length - 1].gatesDown
-				);
-			return;
-		}
-		timingsData.push(data);
-	});
+	upDownData &&
+		upDownData.forEach(gatesEstimate => {
+			if (!gatesEstimate) return;
+			if (!timingsData.length) {
+				timingsData.push(gatesEstimate);
+				return;
+			}
+			const prevTrain = timingsData[timingsData.length - 1];
+			const timeSinceLast = getMinsBetween(
+				gatesEstimate.gatesDown,
+				prevTrain.gatesUp
+			);
+			const data: GatesEstimates = { ...gatesEstimate };
+			data.timeSinceLast = timeSinceLast;
+			data.lastGatesUp = timingsData[timingsData.length - 1].gatesUp;
+			if (gatesEstimate.gatesDown <= prevTrain.gatesUp) {
+				timingsData[timingsData.length - 1].gatesUp =
+					gatesEstimate.gatesUp;
+				timingsData[timingsData.length - 1].gatesDownDuration =
+					getMinsBetween(
+						gatesEstimate.gatesUp,
+						timingsData[timingsData.length - 1].gatesDown
+					);
+				return;
+			}
+			timingsData.push(data);
+		});
 
 	return timingsData;
 }

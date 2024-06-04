@@ -18,21 +18,24 @@ export default async function getFlyThroughEBNDepartures() {
 		}
 	);
 
-	return flyThroughEBNDepartures.map((trainService: TrainService) => {
-		const { std, etd } = trainService;
-		if (!std || !etd) return trainService;
-		const arrival = etd === 'On time' ? std : etd;
-		const dateObject = getTimeStampFromString(arrival);
+	return (
+		flyThroughEBNDepartures &&
+		flyThroughEBNDepartures.map((trainService: TrainService) => {
+			const { std, etd } = trainService;
+			if (!std || !etd) return trainService;
+			const arrival = etd === 'On time' ? std : etd;
+			const dateObject = getTimeStampFromString(arrival);
 
-		const gatesEstimates = {
-			gatesDown: addMinutes(dateObject, 2),
-			gatesUp: addMinutes(dateObject, 3),
-			gatesDownDuration: 1,
-		};
+			const gatesEstimates = {
+				gatesDown: addMinutes(dateObject, 2),
+				gatesUp: addMinutes(dateObject, 3),
+				gatesDownDuration: 1,
+			};
 
-		trainService.gatesEstimates = gatesEstimates;
-		trainService.info = 'EBN Departure';
+			trainService.gatesEstimates = gatesEstimates;
+			trainService.info = 'EBN Departure';
 
-		return trainService;
-	});
+			return trainService;
+		})
+	);
 }

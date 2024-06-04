@@ -16,7 +16,7 @@ export default async function getDepartures(code: string) {
 		},
 	});
 	const data = await response.json();
-	data.trainServices = data.trainServices.map(
+	data.trainServices = data.trainServices?.map(
 		(trainService: TrainService) => {
 			trainService.generatedAt = data.generatedAt.slice(11, 16);
 			return trainService;
