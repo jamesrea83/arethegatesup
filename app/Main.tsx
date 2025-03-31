@@ -34,12 +34,12 @@ export default function MainPage({ cachedData }: Props) {
 						const duration = train.gatesDownDuration;
 						const timeSinceLast = train.timeSinceLast || 0;
 						return (
-							<div
+							<article
 								className='w-full m-0 p-0'
 								key={`${gatesDown}-${timeSinceLast}-${index}`}
 							>
 								{timeSinceLast && lastGatesUp ? (
-									<div
+									<h2
 										className='bg-green-500 w-full min-h-8 overflow-hidden py-1 px-2 rounded-sm'
 										style={{
 											height: `${timeSinceLast}rem`,
@@ -52,9 +52,9 @@ export default function MainPage({ cachedData }: Props) {
 											for {timeSinceLast}m
 										</div>
 										{/* <div>Open for {timeSinceLast}m</div> */}
-									</div>
+									</h2>
 								) : null}
-								<div
+								<h2
 									className=' bg-red-500 w-full min-h-8 py-1 px-2 my-2 rounded-sm'
 									style={{
 										height: `${duration}rem`,
@@ -67,8 +67,8 @@ export default function MainPage({ cachedData }: Props) {
 										for {duration}m
 									</div>
 									{/* <div>Closed for {duration}m</div> */}
-								</div>
-							</div>
+								</h2>
+							</article>
 						);
 					})}
 			</Suspense>

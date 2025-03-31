@@ -1,9 +1,16 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 
 import getTZOffsetTime from '@/utils/getTZOffsetTime';
 import { TrainService } from '@/types/TrainService';
 import getAllData from '@/requests/getAllData';
 import Footer from '@/app/Footer';
+
+export const metadata: Metadata = {
+	title: 'Verbose Hampden Park Level Crossing Tracker',
+	description:
+		'A more detailed look at the services passing through Hampden Park level crossing.',
+};
 
 export default async function Verbose() {
 	const data = await getAllData();
@@ -24,11 +31,11 @@ export default async function Verbose() {
 					getTZOffsetTime(service?.gatesEstimates?.gatesUp);
 
 				return (
-					<div
+					<article
 						key={service.serviceID}
 						className={`gap-1 flex flex-col items-start justify-start my-8`}
 					>
-						<div>Service ID - {service.serviceID}</div>
+						<h2>Service ID - {service.serviceID}</h2>
 						<div>Scheduled - {service.sta || service.std}</div>
 						<div>ETA - {service.eta || service.etd}</div>
 						<div>Platform - {service.platform}</div>
@@ -39,7 +46,7 @@ export default async function Verbose() {
 						<div className='font-bold'>
 							Gates up estimate - {gatesUp}
 						</div>
-					</div>
+					</article>
 				);
 			})}
 			<Link

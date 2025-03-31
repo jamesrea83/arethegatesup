@@ -5,8 +5,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: 'Are the gates up?',
-	description: 'Hampden Park level crossing tracker',
+	title: 'Hampden Park Level Crossing Tracker',
+	description:
+		'Check if the gates at the Hampden Park level crossing will be up before you start your journey.',
 };
 
 export default function RootLayout({
