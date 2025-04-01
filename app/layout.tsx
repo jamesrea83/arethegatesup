@@ -8,6 +8,10 @@ export const metadata: Metadata = {
 	title: 'Hampden Park Level Crossing Tracker',
 	description:
 		'Check if the gates at the Hampden Park level crossing will be up before you start your journey.',
+	metadataBase: new URL('https://www.arethegatesup.com'),
+	alternates: {
+		canonical: 'https://www.arethegatesup.com',
+	},
 };
 
 export default function RootLayout({
