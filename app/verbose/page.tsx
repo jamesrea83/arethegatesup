@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { WebPage, Trip, WithContext } from 'schema-dts';
 
 import getTZOffsetTime from '@/utils/getTZOffsetTime';
 import { TrainService } from '@/types/TrainService';
@@ -19,8 +20,33 @@ export const metadata: Metadata = {
 export default async function Verbose() {
 	const data = await getAllData();
 	if (!data) return <div>no data</div>;
+
+	const jsonLd: WithContext<WebPage> = {
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		url: 'https://www.arethegatesup.com/',
+		name: 'Verbose Hampden Park Level Crossing Tracker',
+		description:
+			'A more detailed look at the services passing through Hampden Park level crossing.',
+
+		mainEntity: {
+			'@type': 'ItemList',
+			itemListElement: data?.map(
+				(service: TrainService, index: number): Trip => ({
+					'@type': 'Trip',
+					arrivalTime: service.sta || service.std,
+					name: service.serviceID,
+				})
+			),
+		},
+	};
+
 	return (
 		<div className='h-full w-full flex flex-col justify-center items-center'>
+			<script
+				type='application/ld+json'
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+			/>
 			{data?.map((service: TrainService, index: number) => {
 				const crossingTime = service?.crossingTrigger
 					?.toLocaleTimeString('en-GB')

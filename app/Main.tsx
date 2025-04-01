@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
+import { WebPage, Trip, WithContext } from 'schema-dts';
 
 import getProcessedData from '@/requests/getProcessedData';
 import { GatesEstimates } from '@/types/GatesEstimates';
@@ -20,8 +21,32 @@ export default function MainPage({ cachedData }: Props) {
 		fetchData();
 	}, []);
 
+	const jsonLd: WithContext<WebPage> = {
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		url: 'https://www.arethegatesup.com/',
+		name: 'Hampden Park Level Crossing Tracker',
+		description:
+			'Check if the gates at the Hampden Park level crossing will be up before you start your journey.',
+
+		mainEntity: {
+			'@type': 'ItemList',
+			itemListElement: data?.map(
+				(train, index: number): Trip => ({
+					'@type': 'Trip',
+					arrivalTime: train.gatesDown.toString(),
+					departureTime: train.gatesUp.toString(),
+				})
+			),
+		},
+	};
+
 	return (
 		<>
+			<script
+				type='application/ld+json'
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+			/>
 			<Suspense>
 				{data &&
 					data?.map((train, index: number) => {
