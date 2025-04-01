@@ -46,12 +46,14 @@ export default function MainPage({ cachedData }: Props) {
 										}}
 									>
 										<div>
-											<span className='font-bold'>
-												{lastGatesUp} - Gates up
-											</span>{' '}
-											for {timeSinceLast}m
+											<h3>
+												<span className='font-bold'>
+													{lastGatesUp}
+												</span>{' '}
+												- Level crossing open for{' '}
+												{timeSinceLast}m
+											</h3>
 										</div>
-										{/* <div>Open for {timeSinceLast}m</div> */}
 									</h2>
 								) : null}
 								<h2
@@ -61,10 +63,13 @@ export default function MainPage({ cachedData }: Props) {
 									}}
 								>
 									<div>
-										<span className='font-bold'>
-											{gatesDown} - Gates down
-										</span>{' '}
-										for {duration}m
+										<h3>
+											<span className='font-bold'>
+												{gatesDown}
+											</span>{' '}
+											- Level crossing closed for{' '}
+											{duration}m
+										</h3>
 									</div>
 									{/* <div>Closed for {duration}m</div> */}
 								</h2>
