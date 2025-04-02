@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
 			userAgent: '*',
 			allow: '/',
 		},
-		sitemap: 'https://www.arethegatesup.com/sitemap.xml',
+		sitemap: 'https://arethegatesup.com/sitemap.xml',
 	};
 }

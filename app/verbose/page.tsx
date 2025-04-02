@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 	title: 'Verbose Hampden Park Level Crossing Tracker',
 	description:
 		'A more detailed look at the services passing through Hampden Park level crossing.',
-	metadataBase: new URL('https://www.arethegatesup.com/verbose'),
+	metadataBase: new URL('https://arethegatesup.com/verbose'),
 	alternates: {
-		canonical: 'https://www.arethegatesup.com/verbose',
+		canonical: 'https://arethegatesup.com/verbose',
 	},
 };
 
@@ -24,7 +24,7 @@ export default async function Verbose() {
 	const jsonLd: WithContext<WebPage> = {
 		'@context': 'https://schema.org',
 		'@type': 'WebPage',
-		url: 'https://www.arethegatesup.com/',
+		url: 'https://arethegatesup.com/',
 		name: 'Verbose Hampden Park Level Crossing Tracker',
 		description:
 			'A more detailed look at the services passing through Hampden Park level crossing.',

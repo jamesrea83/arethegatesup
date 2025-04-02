@@ -24,7 +24,7 @@ export default function MainPage({ cachedData }: Props) {
 	const jsonLd: WithContext<WebPage> = {
 		'@context': 'https://schema.org',
 		'@type': 'WebPage',
-		url: 'https://www.arethegatesup.com/',
+		url: 'https://arethegatesup.com/',
 		name: 'Hampden Park Level Crossing Tracker',
 		description:
 			'Check if the gates at the Hampden Park level crossing will be up before you start your journey.',
