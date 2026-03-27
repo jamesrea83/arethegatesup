@@ -15,8 +15,8 @@ export default async function getProcessedData() {
 		.map((trainService: TrainService) => {
 			const { gatesEstimates } = trainService;
 			if (!gatesEstimates) return;
-			const { gatesDown, gatesUp, gatesDownDuration } = gatesEstimates;
-			return { gatesDown, gatesUp, gatesDownDuration };
+			const { gatesDown, gatesUp, gatesDownDuration, isUncertain } = gatesEstimates;
+			return { gatesDown, gatesUp, gatesDownDuration, isUncertain };
 		})
 		.sort((a, b) => {
 			if (!a || !b) return 0;
@@ -50,6 +50,9 @@ export default async function getProcessedData() {
 						gatesEstimate.gatesUp,
 						timingsData[timingsData.length - 1].gatesDown
 					);
+				if (gatesEstimate.isUncertain) {
+					timingsData[timingsData.length - 1].isUncertain = true;
+				}
 				return;
 			}
 			timingsData.push(data);

@@ -8,10 +8,9 @@ export default async function getFlyThroughEBNDepartures() {
 
 	const flyThroughEBNDepartures = departuresEBN.filter(
 		(trainService: TrainService) => {
-			const { subsequentCallingPoints, isCancelled, eta } = trainService;
+			const { subsequentCallingPoints, isCancelled } = trainService;
 			if (!subsequentCallingPoints) return false;
 			if (isCancelled) return false;
-			if (eta === 'Delayed') return false;
 			const nextStop = subsequentCallingPoints[0]?.callingPoint[0];
 			if (!nextStop || nextStop.crs === 'HMD') return false;
 			return true;
@@ -22,14 +21,16 @@ export default async function getFlyThroughEBNDepartures() {
 		flyThroughEBNDepartures &&
 		flyThroughEBNDepartures.map((trainService: TrainService) => {
 			const { std, etd } = trainService;
-			if (!std || !etd) return trainService;
-			const arrival = etd === 'On time' ? std : etd;
-			const dateObject = getTimeStampFromString(arrival);
+			if (!std) return trainService;
+			const isUncertain = etd === 'Delayed' || !etd;
+			const departure = !etd || etd === 'On time' || etd === 'Delayed' ? std : etd;
+			const dateObject = getTimeStampFromString(departure);
 
 			const gatesEstimates = {
 				gatesDown: addMinutes(dateObject, 2),
 				gatesUp: addMinutes(dateObject, 3),
 				gatesDownDuration: 1,
+				isUncertain,
 			};
 
 			trainService.gatesEstimates = gatesEstimates;

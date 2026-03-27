@@ -14,11 +14,27 @@ export default function MainPage({ cachedData }: Props) {
 	const [data, setData] = useState<GatesEstimates[]>(cachedData);
 
 	useEffect(() => {
+		let timeoutId: ReturnType<typeof setTimeout>;
+
 		const fetchData = async () => {
-			const data = await getProcessedData();
-			setData(data);
+			const freshData = await getProcessedData();
+			setData(freshData);
+
+			const now = new Date();
+			const nextClosure = freshData?.find(
+				d => new Date(d.gatesDown) > now
+			);
+			const minsUntil = nextClosure
+				? (new Date(nextClosure.gatesDown).getTime() - now.getTime()) /
+					60000
+				: Infinity;
+			const interval = minsUntil <= 5 ? 15000 : 60000;
+
+			timeoutId = setTimeout(fetchData, interval);
 		};
+
 		fetchData();
+		return () => clearTimeout(timeoutId);
 	}, []);
 
 	const jsonLd: WithContext<WebPage> = {
@@ -58,6 +74,7 @@ export default function MainPage({ cachedData }: Props) {
 
 						const duration = train.gatesDownDuration;
 						const timeSinceLast = train.timeSinceLast || 0;
+						const isUncertain = train.isUncertain;
 						return (
 							<article
 								className='w-full m-0 p-0'
@@ -75,14 +92,13 @@ export default function MainPage({ cachedData }: Props) {
 												<span className='font-bold'>
 													{lastGatesUp}
 												</span>{' '}
-												- Level crossing open for{' '}
-												{timeSinceLast}m
+												- Open for {timeSinceLast}m
 											</h3>
 										</div>
 									</h2>
 								) : null}
 								<h2
-									className=' bg-red-500 w-full min-h-8 py-1 px-2 my-2 rounded-sm'
+									className={`w-full min-h-8 py-1 px-2 my-2 rounded-sm ${isUncertain ? 'bg-amber-500' : 'bg-red-500'}`}
 									style={{
 										height: `${duration}rem`,
 									}}
@@ -90,13 +106,15 @@ export default function MainPage({ cachedData }: Props) {
 									<div>
 										<h3>
 											<span className='font-bold'>
+												{isUncertain ? '~' : ''}
 												{gatesDown}
 											</span>{' '}
-											- Level crossing closed for{' '}
-											{duration}m
+											- Closed for {duration}m
+											{isUncertain
+												? ' (delayed - approx)'
+												: ''}
 										</h3>
 									</div>
-									{/* <div>Closed for {duration}m</div> */}
 								</h2>
 							</article>
 						);

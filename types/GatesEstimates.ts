@@ -4,4 +4,5 @@ export interface GatesEstimates {
 	lastGatesUp?: Date;
 	gatesDownDuration: number;
 	timeSinceLast?: number;
+	isUncertain?: boolean;
 }
